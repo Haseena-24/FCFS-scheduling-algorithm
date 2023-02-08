@@ -1,38 +1,38 @@
 #include <stdio.h>
 
-void BestFit(int blockSize[], int blocks, int processSize[], int proccesses)
+void WorstFit(int blockSize[], int m, int processSize[], int n)
 {
     // This will store the block id of the allocated block to a process
-    int allocation[proccesses];
-    int occupied[blocks];
+    int allocation[n];
+    int occupied[m];
     int i,j;
     // initially assigning -1 to all allocation indexes
     // means nothing is allocated currently
-    for(i = 0; i < proccesses; i++){
+    for(i = 0; i < n; i++){
         allocation[i] = -1;
     }
     
-    for(i = 0; i < blocks; i++){
+    for(i = 0; i < m; i++){
         occupied[i] = 0;
     }
  
     // pick each process and find suitable blocks
     // according to its size ad assign to it
-    for (i=0; i<proccesses; i++)
+    for (i=0; i < n; i++)
     {
-        
-        int indexPlaced = -1;
-        for (j=0; j<blocks; j++) 
-        { 
-            if (blockSize[j] >= processSize[i] && !occupied[j])
+	int indexPlaced = -1;
+	for(j = 0; j < m; j++)
+	{
+	    // if not occupied and block size is large enough
+	    if(blockSize[j] >= processSize[i] && !occupied[j])
             {
                 // place it at the first block fit to accomodate process
                 if (indexPlaced == -1)
                     indexPlaced = j;
                     
-                // if any future block is smaller than the current block where
+                // if any future block is larger than the current block where
                 // process is placed, change the block and thus indexPlaced
-                else if (blockSize[indexPlaced] >= blockSize[j])
+                else if (blockSize[indexPlaced] < blockSize[j])
                     indexPlaced = j;
             }
         }
@@ -52,7 +52,7 @@ void BestFit(int blockSize[], int blocks, int processSize[], int proccesses)
     }
  
     printf("\nProcess No.\tProcess Size\tBlock no.\n");
-    for (i = 0; i < proccesses; i++)
+    for (i = 0; i < n; i++)
     {
         printf("%d \t\t\t %d \t\t\t", i+1, processSize[i]);
         if (allocation[i] != -1)
@@ -84,7 +84,7 @@ int main()
 		scanf("%d",&processSize[i]);
 	}
 
-	BestFit(blockSize, m, processSize, n);
+	WorstFit(blockSize, m, processSize, n);
 
 	return 0 ;
 }
